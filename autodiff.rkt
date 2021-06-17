@@ -121,6 +121,13 @@
     ))
 )
 
-; cond [(= (length names) 0) '()]
-;              [(member (car names) vars) (cons (grad names values (car(member (car names) vars)) expr) (partial-grad (cdr names) values vars expr))]
-;              [else (cons 0.0 (partial-grad (cdr names) values vars expr))]
+; 5.5 gradient-descent
+(
+    define gradient-descent (lambda (names values vars lr expr)(
+        map(
+            lambda (val grad)(
+                - val (* lr grad)
+            )
+        ) values (partial-grad names values vars expr)
+    ))
+)
