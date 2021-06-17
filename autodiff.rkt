@@ -12,7 +12,7 @@
     define get-value (lambda (x) (
     cond [(num? x) (num-value x)]
          [(= (length x) 0) '()]
-        (else (cons (cadr (car x)) (get-value (cdr x)) ))))
+         (else (cons (cadr (car x)) (get-value (cdr x)) ))))
 )
 
 ; 3.1 get-grad
@@ -20,22 +20,22 @@
     define get-grad (lambda (x) (
     cond [(num? x) (num-grad (x))]
          [(= (length x) 0) '()]
-        (else (cons (caddr (car x)) (get-grad (cdr x)) ))))
+         (else (cons (caddr (car x)) (get-grad (cdr x)) ))))
 )
 
 ; 4.1 add
 (
     define add (lambda args (
         cond [(= (length args) 2) (num (+(num-value(car args)) (num-value(cadr args))) (+(num-grad(car args)) (num-grad(cadr args))))]
-            [else (add (car args) (apply add (cdr args)))]
+             [else (add (car args) (apply add (cdr args)))]
     ))
 )
 
 ; 4.2 mul
 (
     define mul (lambda args (
-        cond [(= (length args) 2) (num (*(num-value(car args)) (num-value(cadr args))) (*(num-grad(car args)) (num-grad(cadr args))))]
-            [else (mul (car args) (apply mul (cdr args)))]
+        cond [(= (length args) 2) (num (*(num-value(car args)) (num-value(cadr args))) (+(*(num-value(car args)) (num-grad(cadr args))) (*(num-value(cadr args)) (num-grad(car args)))))]
+             [else (mul (car args) (apply mul (cdr args)))]
     ))
 )
 
@@ -84,3 +84,5 @@
              [else (hash-ref hash expr)]
     ))
 )
+
+; 5.3 grad
