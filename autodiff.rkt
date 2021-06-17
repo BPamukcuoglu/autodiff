@@ -86,3 +86,8 @@
 )
 
 ; 5.3 grad
+(
+    define grad (lambda (names values var expr)(
+        num-grad (eval (parse (create-hash  names values var) expr))
+    ))
+)
