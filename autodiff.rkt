@@ -65,6 +65,7 @@
 (
     define make-nums (lambda (names values var) (
         cond [(= (length values) 0) '()]
+             [(= (length names) 0) '()]
              [(equal? (car names) var) (cons (num (car values) 1.0) (make-nums(cdr names) (cdr values) var))]
              [else (cons (num (car values) 0.0) (make-nums(cdr names) (cdr values) var))]
     ))
@@ -88,6 +89,38 @@
 ; 5.3 grad
 (
     define grad (lambda (names values var expr)(
-        num-grad (eval (parse (create-hash  names values var) expr))
+        num-grad (eval (parse (create-hash names values var) expr))
     ))
 )
+
+; 5.4 partial-grad
+(
+    define partial-grad (lambda (names values vars expr)(
+        change-values (all-grads names values vars expr) names vars
+    ))
+)
+
+(
+    define all-grads (lambda (names values vars expr)(
+        map (
+            lambda (name) (
+                grad names values name expr
+            )
+        ) names
+    ))
+)
+
+(
+    define change-values (lambda (grads names vars)(
+        map (
+            lambda (name grad) (
+                cond [(member name vars) grad]
+                     [else 0.0]
+            )
+        ) names grads
+    ))
+)
+
+; cond [(= (length names) 0) '()]
+;              [(member (car names) vars) (cons (grad names values (car(member (car names) vars)) expr) (partial-grad (cdr names) values vars expr))]
+;              [else (cons 0.0 (partial-grad (cdr names) values vars expr))]
