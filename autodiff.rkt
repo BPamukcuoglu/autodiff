@@ -66,6 +66,21 @@
     define make-nums (lambda (names values var) (
         cond [(= (length values) 0) '()]
              [(equal? (car names) var) (cons (num (car values) 1.0) (make-nums(cdr names) (cdr values) var))]
-        [else (cons (num (car values) 0.0) (make-nums(cdr names) (cdr values) var))]
+             [else (cons (num (car values) 0.0) (make-nums(cdr names) (cdr values) var))]
+    ))
+)
+
+; 5.2 parse
+(
+    define parse (lambda (hash expr) (
+        cond [(equal? expr '+)  'add ]
+             [(equal? expr '-)  'sub ]
+             [(equal? expr '*)  'mul ]
+             [(equal? expr 'mse)  'mse ]
+             [(equal? expr 'relu)  'relu ]
+             [(number? expr) (num expr 0.0) ]
+             [(and (list? expr) (= (length expr) 0)) '()]
+             [(and (list? expr) (> (length expr) 0)) (cons (parse hash (car expr)) (parse hash (cdr expr)))]
+             [else (hash-ref hash expr)]
     ))
 )
