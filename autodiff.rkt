@@ -131,3 +131,11 @@
         ) values (partial-grad names values vars expr)
     ))
 )
+
+; 5.6 optimize
+(
+    define optimize (lambda (names values vars lr k expr)(
+        cond [(= k 1) (gradient-descent names values vars lr expr)]
+             [else (optimize names (gradient-descent names values vars lr expr) vars lr (- k 1) expr)]
+    ))
+)
